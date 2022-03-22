@@ -1,0 +1,16 @@
+/build
+/dist
+
+# Eclipse
+.settings
+.classpath
+.project
+
+#IntelliJ Idea
+/.idea
+*.ipr
+*.iml
+*.iws
+
+# VS Code
+.vscode
