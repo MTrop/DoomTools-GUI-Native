@@ -18,7 +18,7 @@ Still requires Java, no getting around that.
 ## Why?
 
 Because running the DoomTools GUI via a CMD script will still produce an unnecessary console
-window, and mars the user experience if Windows GUI applications. Just using `javaw` does not
+window, and mars the user experience of Windows GUI applications. Just using `javaw` does not
 prevent this.
 
 So, this is a bootstrap that works exactly like the DoomTools command-line scripts for Java
