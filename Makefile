@@ -15,7 +15,7 @@ BUILD_DIR     := build
 # Distributable directory.
 DIST_DIR      := dist
 # Modules to build.
-MODULES       := 
+MODULES       := common
 # Images to build.
 RESOURCES     := doomtools-gui
 EXECUTABLES   := doomtools-gui

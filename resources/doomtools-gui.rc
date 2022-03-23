@@ -1,1 +1,36 @@
-id ICON "resources/doomtools-logo.ico"
+#include <windows.h>
+
+exeIcon ICON "resources/doomtools-gui-logo.ico"
+
+#ifndef DEBUG
+#define VER_DEBUG                   0
+#else
+#define VER_DEBUG                   VS_FF_DEBUG
+#endif
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION 1,0,0,0
+PRODUCTVERSION 1,0,0,0
+FILEOS VOS_NT
+FILETYPE VFT_APP
+{
+    BLOCK "StringFileInfo"
+    {
+        BLOCK "040904b0"
+        {
+            VALUE "FileDescription",  "DoomTools GUI Bootstrap"
+            VALUE "FileVersion",      "1.0.0.0"
+            VALUE "InternalName",     "doomtools-gui"
+            VALUE "LegalCopyright",   "(C) 2022 Matt Tropiano"
+            VALUE "ProductName",      "DoomTools GUI Bootstrap"
+            VALUE "OriginalFilename", "doomtools-gui.exe"
+            VALUE "ProductVersion",   "1.0.0.0"
+            VALUE "ProductShortName", "DoomTools"
+        }
+    }
+
+    BLOCK "VarFileInfo"
+    {
+        VALUE "Translation", 0x0409, 0x04B0
+    }
+}
