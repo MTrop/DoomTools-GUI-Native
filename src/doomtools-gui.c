@@ -45,6 +45,9 @@ https://java.com/en/download/ (Oracle)"
 #define ERROR_BADCMDPARSE     L"FATAL ERROR: Could not parse command line."
 #define ERROR_CANTSTART       L"FATAL ERROR: Could not create Java process."
 #define ERROR_NORESULT        L"FATAL ERROR: Could not get Java process result on exit!"
+#define ERROR_BADSTDOUT       L"FATAL ERROR: Can't create NUL output handle for STDOUT!"
+#define ERROR_BADSTDERR       L"FATAL ERROR: Can't create NUL output handle for STDERR!"
+#define ERROR_BADSTDIN        L"FATAL ERROR: Can't create NUL output handle for STDIN!"
 #define ERROR_INVALIDFILE     L"INTERNAL ERROR: An Invalid File Handle was used to search for JARs!"
 
 #ifndef ARG_JAVA_MAIN_CLASS
@@ -56,6 +59,21 @@ https://java.com/en/download/ (Oracle)"
 #define ARG_JAVA_MEM_MAX      L"-Xmx768M"
 
 /****************************************************************************/
+
+/**
+ * @brief Creates a HANDLE to the 'nul' file.
+ */
+static HANDLE OpenNull()
+{
+	return CreateFile(TEXT("nul:"),
+		GENERIC_READ | GENERIC_WRITE,
+		FILE_SHARE_READ | FILE_SHARE_WRITE,
+		NULL,
+		OPEN_EXISTING,
+		0,
+		NULL
+	);
+}
 
 /**
  * @brief Calls Java and waits for completion.
@@ -86,7 +104,30 @@ static int CallJava(LPCWSTR wJavaExePath, LPCWSTR wWorkingDirPath, LPCWSTR wJarP
 	STARTUPINFO startupInfo;
 	ZeroMemory(&processInfo, sizeof(processInfo));
 	ZeroMemory(&startupInfo, sizeof(startupInfo));
+	
+	// Kill OUT, ERR, and IN - no input for this process, 
+	// and the important output gets logged separately, anyway.
+	startupInfo.dwFlags = STARTF_USESTDHANDLES;
 
+	if ((startupInfo.hStdOutput = OpenNull()) == INVALID_HANDLE_VALUE)
+	{
+		ShowError(ERROR_BADSTDOUT);
+		return 101;
+	}
+
+	if ((startupInfo.hStdError = OpenNull()) == INVALID_HANDLE_VALUE)
+	{
+		ShowError(ERROR_BADSTDERR);
+		return 101;
+	}
+
+	if ((startupInfo.hStdInput = OpenNull()) == INVALID_HANDLE_VALUE)
+	{
+		ShowError(ERROR_BADSTDIN);
+		return 101;
+	}
+
+	// Start 'er up!
 	if (!CreateProcess(wJavaExePath, wCmdLineOut, NULL, NULL, FALSE, flags, NULL, wWorkingDirPath, &startupInfo, &processInfo))
 	{
 		ShowError(ERROR_CANTSTART);
@@ -97,8 +138,11 @@ static int CallJava(LPCWSTR wJavaExePath, LPCWSTR wWorkingDirPath, LPCWSTR wJarP
 	WaitForSingleObject(processInfo.hProcess, INFINITE);
 
 	BOOL gotCode = GetExitCodeProcess(processInfo.hProcess, &result);
+	CloseHandle(startupInfo.hStdOutput);
+	CloseHandle(startupInfo.hStdError);
+	CloseHandle(startupInfo.hStdInput);
 	CloseHandle(processInfo.hProcess);
-    CloseHandle(processInfo.hThread);
+	CloseHandle(processInfo.hThread);
 
 	if (!gotCode)
 	{
