@@ -37,6 +37,7 @@ For help, visit https://www.java.com/.\n\
 Java can be downloaded from the following places:\n\
 \n\
 https://www.azul.com/downloads/ (Azul)\n\
+https://adoptium.net/temurin/releases/ (Adoptium)\n\
 https://www.microsoft.com/openjdk (Microsoft)\n\
 https://java.com/en/download/ (Oracle)"
 
@@ -57,6 +58,11 @@ https://java.com/en/download/ (Oracle)"
 #define ARG_JAVA_CLASSPATH    L"-cp"
 #define ARG_JAVA_MEM_INIT     L"-Xms64M"
 #define ARG_JAVA_MEM_MAX      L"-Xmx768M"
+
+/****************************************************************************/
+
+#define ENVVAR_DOOMTOOLS_PATH L"DOOMTOOLS_PATH"
+#define ENVVAR_DOOMTOOLS_JAR  L"DOOMTOOLS_JAR"
 
 /****************************************************************************/
 

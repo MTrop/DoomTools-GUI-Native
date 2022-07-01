@@ -34,11 +34,6 @@
 
 #define ERROR_BADPATHSEARCH   L"INTERNAL ERROR: \"Found\" Java on PATH, but file doesn't EXIST!"
 
-/****************************************************************************/
-
-#define ENVVAR_DOOMTOOLS_PATH L"DOOMTOOLS_PATH"
-#define ENVVAR_DOOMTOOLS_JAR  L"DOOMTOOLS_JAR"
-
 /*****************************************************************************/
 
 /**
